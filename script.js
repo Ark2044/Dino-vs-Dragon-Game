@@ -67,31 +67,53 @@ function updateScore(score) {
 }
 
 document.onkeydown = function (e) {
-  console.log("Key code is: ", e.key);
-
-  if (e.key === "ArrowUp") {
-    if (cross) {
-      const dino = document.querySelector(".dino");
-      dino.classList.add("animateDino");
-      setTimeout(() => {
-        dino.classList.remove("animateDino");
-      }, 700);
-    }
-  }
-
-  if (e.key === "ArrowRight") {
-    const dino = document.querySelector(".dino");
-    let dinoX = parseInt(
-      window.getComputedStyle(dino, null).getPropertyValue("left")
-    );
-    dino.style.left = dinoX + 112 + "px";
-  }
-
-  if (e.key === "ArrowLeft") {
-    const dino = document.querySelector(".dino");
-    let dinoX = parseInt(
-      window.getComputedStyle(dino, null).getPropertyValue("left")
-    );
-    dino.style.left = dinoX - 112 + "px";
-  }
+  handleKeyPress(e.key);
 };
+
+document.addEventListener("click", handleTap);
+
+function handleKeyPress(key) {
+  console.log("Key code is: ", key);
+
+  if (key === "ArrowUp") {
+    jump();
+  }
+
+  if (key === "ArrowRight") {
+    moveRight();
+  }
+
+  if (key === "ArrowLeft") {
+    moveLeft();
+  }
+}
+
+function handleTap() {
+  jump();
+}
+
+function jump() {
+  if (cross) {
+    const dino = document.querySelector(".dino");
+    dino.classList.add("animateDino");
+    setTimeout(() => {
+      dino.classList.remove("animateDino");
+    }, 700);
+  }
+}
+
+function moveRight() {
+  const dino = document.querySelector(".dino");
+  let dinoX = parseInt(
+    window.getComputedStyle(dino, null).getPropertyValue("left")
+  );
+  dino.style.left = dinoX + 112 + "px";
+}
+
+function moveLeft() {
+  const dino = document.querySelector(".dino");
+  let dinoX = parseInt(
+    window.getComputedStyle(dino, null).getPropertyValue("left")
+  );
+  dino.style.left = dinoX - 112 + "px";
+}
