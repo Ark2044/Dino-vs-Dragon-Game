@@ -106,7 +106,7 @@ body {
 
 @media (max-width: 480px) {
     .dino {
-        width: 120px;
+        width: 100px;
     }
     .obstacle {
         width: 70px;

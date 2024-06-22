@@ -1,119 +1,101 @@
-score = 0;
-cross = true;
+let score = 0;
+let cross = true;
+let obstacleSpeed = 5; // Initial speed for obstacle
 
-audio = new Audio("images/music.mp3");
-audiogo = new Audio("images/gameover.mp3");
+const audio = new Audio("images/music.mp3");
+const audiogo = new Audio("images/gameover.mp3");
 
 setTimeout(() => {
-  audio.play();
+    audio.play();
 }, 1000);
 
 setInterval(() => {
-  const dino = document.querySelector(".dino");
-  const gameOver = document.querySelector(".gameOver");
-  const obstacle = document.querySelector(".obstacle");
+    const dino = document.querySelector(".dino");
+    const gameOver = document.querySelector(".gameOver");
+    const obstacle = document.querySelector(".obstacle");
 
-  let dx = parseInt(
-    window.getComputedStyle(dino, null).getPropertyValue("left")
-  );
-  let dy = parseInt(
-    window.getComputedStyle(dino, null).getPropertyValue("top")
-  );
+    const dx = parseInt(window.getComputedStyle(dino).getPropertyValue("left"));
+    const dy = parseInt(window.getComputedStyle(dino).getPropertyValue("bottom"));
 
-  let ox = parseInt(
-    window.getComputedStyle(obstacle, null).getPropertyValue("left")
-  );
-  let oy = parseInt(
-    window.getComputedStyle(obstacle, null).getPropertyValue("top")
-  );
+    const ox = parseInt(window.getComputedStyle(obstacle).getPropertyValue("left"));
+    const oy = parseInt(window.getComputedStyle(obstacle).getPropertyValue("bottom"));
 
-  let offsetX = Math.abs(dx - ox);
-  let offsetY = Math.abs(dy - oy);
+    const offsetX = Math.abs(dx - ox);
+    const offsetY = Math.abs(dy - oy);
 
-  if (offsetX < 73 && offsetY < 52) {
-    gameOver.innerHTML = "Game Over - Reload to Play Again";
-    obstacle.style.animationDuration = "0s"; // Stop the obstacle animation
-    audiogo.play();
-    cross = false;
-    setTimeout(() => {
-      audiogo.pause();
-      audio.pause();
-    }, 1000);
-  } else if (offsetX < 145 && cross) {
-    score += 1;
-    updateScore(score);
+    if (offsetX < 145 && offsetY < 52) {
+        gameOver.innerHTML = "Game Over - Reload to Play Again";
+        gameOver.style.display = "block";
+        obstacle.style.animation = "none"; // Stop obstacle animation on collision
+        audiogo.play();
+        cross = false;
+        setTimeout(() => {
+            audiogo.pause();
+            audio.pause();
+        }, 1000);
+    } else if (offsetX < 145 && cross) {
+        score += 1;
+        updateScore(score);
 
-    if (cross) {
-      dino.classList.add("animateDino");
-      setTimeout(() => {
-        dino.classList.remove("animateDino");
-      }, 100);
+        if (cross) {
+            dino.classList.add("animateDino");
+            setTimeout(() => {
+                dino.classList.remove("animateDino");
+            }, 700);
+        }
+
+        // Increase obstacle speed gradually
+        obstacleSpeed *= 0.98; // Adjust the multiplier for speed increase as needed
+        obstacle.style.animationDuration = obstacleSpeed + "s";
     }
-
-    // Increase obstacle speed
-    let aniDur = parseFloat(
-      window
-        .getComputedStyle(obstacle, null)
-        .getPropertyValue("animation-duration")
-    );
-    let newDur = aniDur - 0.1;
-    obstacle.style.animationDuration = newDur + "s";
-    console.log("New animation duration: ", newDur);
-  }
 }, 10);
 
 function updateScore(score) {
-  scoreCont.innerHTML = "Your Score: " + score;
+    const scoreCont = document.getElementById("scoreCont");
+    scoreCont.innerHTML = "Your Score: " + score;
 }
 
-document.onkeydown = function (e) {
-  handleKeyPress(e.key);
-};
+document.addEventListener("keydown", (e) => {
+    handleKeyPress(e.key);
+});
 
 document.addEventListener("click", handleTap);
 
+// Touch events for mobile
+document.addEventListener("touchstart", handleTap);
+
 function handleKeyPress(key) {
-  console.log("Key code is: ", key);
-
-  if (key === "ArrowUp") {
-    jump();
-  }
-
-  if (key === "ArrowRight") {
-    moveRight();
-  }
-
-  if (key === "ArrowLeft") {
-    moveLeft();
-  }
+    if (key === "ArrowUp") {
+        jump();
+    } else if (key === "ArrowRight") {
+        moveRight();
+    } else if (key === "ArrowLeft") {
+        moveLeft();
+    }
 }
 
 function handleTap() {
-  jump();
+    jump();
 }
 
 function jump() {
-  if (cross) {
-    const dino = document.querySelector(".dino");
-    dino.classList.add("animateDino");
-    setTimeout(() => {
-      dino.classList.remove("animateDino");
-    }, 700);
-  }
+    if (cross) {
+        const dino = document.querySelector(".dino");
+        dino.classList.add("animateDino");
+        setTimeout(() => {
+            dino.classList.remove("animateDino");
+        }, 700);
+    }
 }
 
 function moveRight() {
-  const dino = document.querySelector(".dino");
-  let dinoX = parseInt(
-    window.getComputedStyle(dino, null).getPropertyValue("left")
-  );
-  dino.style.left = dinoX + 112 + "px";
+    const dino = document.querySelector(".dino");
+    let dinoX = parseInt(window.getComputedStyle(dino).getPropertyValue("left"));
+    dino.style.left = dinoX + 112 + "px";
 }
 
 function moveLeft() {
-  const dino = document.querySelector(".dino");
-  let dinoX = parseInt(
-    window.getComputedStyle(dino, null).getPropertyValue("left")
-  );
-  dino.style.left = dinoX - 112 + "px";
+    const dino = document.querySelector(".dino");
+    let dinoX = parseInt(window.getComputedStyle(dino).getPropertyValue("left"));
+    dino.style.left = dinoX - 112 + "px";
 }
