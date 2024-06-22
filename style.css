@@ -1,35 +1,37 @@
 /* style.css */
 
-*{
+* {
     margin: 0;
     padding: 0;
 }
 
-body{
+body {
     background-color: red;
     overflow: hidden;
 }
-.gameContainer{
-    background-image:url(./images/bg.png);
+
+.gameContainer {
+    background-image: url(./images/bg.png);
     background-repeat: no-repeat;
     background-size: 100vw 100vh;
     width: 100%;
     height: 100vh;
 }
-.dino{
+
+.dino {
     background-image: url(./images/dino.png);
-    background-repeat: no repeat;
+    background-repeat: no-repeat;
     background-size: cover;
     width: 233px;
     height: 114px;
     bottom: 0;
     left: 52px;
     position: absolute;
-    
 }
 
-.obstacle{
+.obstacle {
     background-image: url(./images/dragon.png);
+    background-repeat: no-repeat;
     background-size: cover;
     width: 166px;
     height: 113px;
@@ -37,46 +39,82 @@ body{
     left: 44vw;
     position: absolute;
 }
+
 .animateDino {
     animation: dino 0.6s linear;
 }
 
-.obstacleAni{
+.obstacleAni {
     animation: obstacleAni 5s linear infinite;
 }
-.gameOver{
+
+.gameOver {
     position: relative;
-    top: 65px;
-    font-size: 50px;
+    top: 10vh; 
+    font-size: 5vw;
     text-align: center;
     font-family: sans-serif;
 }
 
-#scoreCont{
-    font-size: 25px;
+#scoreCont {
+    font-size: 2vw; 
     color: #54212f;
     font-weight: bold;
     position: absolute;
-    right: 45px;
-    top: 31px;
+    right: 5vw; 
+    top: 3vh; 
     border: 2px solid black;
-    padding: 10px;
-    border-radius: 10px;
+    padding: 1vw;
+    border-radius: 1vw; 
 }
-@keyframes dino{
-    0%{
+
+@keyframes dino {
+    0% {
         bottom: 0;
     }
-    50%{
+    50% {
         bottom: 422px;
     }
 }
 
-@keyframes obstacleAni{
-    0%{
+@keyframes obstacleAni {
+    0% {
         left: 100vw;
     }
-    100%{
+    100% {
         left: -10vw;
+    }
+}
+
+/* Media Queries for different screen sizes */
+@media (max-width: 768px) {
+    .dino {
+        width: 160px;
+        background-size: contain;
+    }
+    .obstacle {
+        width: 130px;
+        background-size: contain;
+    }
+    .gameOver {
+        font-size: 6vw;
+    }
+    #scoreCont {
+        font-size: 4vw;
+    }
+}
+
+@media (max-width: 480px) {
+    .dino {
+        width: 120px;
+    }
+    .obstacle {
+        width: 70px;
+    }
+    .gameOver {
+        font-size: 8vw;
+    }
+    #scoreCont {
+        font-size: 5vw;
     }
 }
