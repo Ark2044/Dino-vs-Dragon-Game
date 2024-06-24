@@ -14,16 +14,19 @@ setInterval(() => {
     const gameOver = document.querySelector(".gameOver");
     const obstacle = document.querySelector(".obstacle");
 
-    const dx = parseInt(window.getComputedStyle(dino).getPropertyValue("left"));
-    const dy = parseInt(window.getComputedStyle(dino).getPropertyValue("bottom"));
+    const dinoRect = dino.getBoundingClientRect();
+    const obstacleRect = obstacle.getBoundingClientRect();
 
-    const ox = parseInt(window.getComputedStyle(obstacle).getPropertyValue("left"));
-    const oy = parseInt(window.getComputedStyle(obstacle).getPropertyValue("bottom"));
+    // Calculate offsetX and offsetY based on the centers of the elements
+    const dinoCenterX = dinoRect.left + dinoRect.width / 2;
+    const dinoCenterY = dinoRect.top + dinoRect.height / 2;
+    const obstacleCenterX = obstacleRect.left + obstacleRect.width / 2;
+    const obstacleCenterY = obstacleRect.top + obstacleRect.height / 2;
 
-    const offsetX = Math.abs(dx - ox);
-    const offsetY = Math.abs(dy - oy);
+    const offsetX = Math.abs(dinoCenterX - obstacleCenterX) - (dinoRect.width + obstacleRect.width) / 2;
+    const offsetY = Math.abs(dinoCenterY - obstacleCenterY) - (dinoRect.height + obstacleRect.height) / 2;
 
-    if (offsetX < 145 && offsetY < 52) {
+    if (offsetX < 0 && offsetY < 0) {
         gameOver.innerHTML = "Game Over - Reload to Play Again";
         gameOver.style.display = "block";
         obstacle.style.animation = "none"; // Stop obstacle animation on collision
@@ -33,7 +36,7 @@ setInterval(() => {
             audiogo.pause();
             audio.pause();
         }, 1000);
-    } else if (offsetX < 145 && cross) {
+    } else if (offsetX < 50 && cross) { // Adjust collision threshold as needed
         score += 1;
         updateScore(score);
 
@@ -90,12 +93,20 @@ function jump() {
 
 function moveRight() {
     const dino = document.querySelector(".dino");
-    let dinoX = parseInt(window.getComputedStyle(dino).getPropertyValue("left"));
-    dino.style.left = dinoX + 112 + "px";
+    let dinoX = parseFloat(window.getComputedStyle(dino).getPropertyValue("left"));
+    const screenWidth = window.innerWidth;
+    const dinoWidth = dino.offsetWidth;
+    const moveDistance = screenWidth * 0.25; // Adjust for different screen sizes
+
+    dinoX = Math.min(dinoX + moveDistance, screenWidth - dinoWidth);
+    dino.style.left = dinoX + "px";
 }
 
 function moveLeft() {
     const dino = document.querySelector(".dino");
-    let dinoX = parseInt(window.getComputedStyle(dino).getPropertyValue("left"));
-    dino.style.left = dinoX - 112 + "px";
+    let dinoX = parseFloat(window.getComputedStyle(dino).getPropertyValue("left"));
+    const moveDistance = window.innerWidth * 0.25; // Adjust for different screen sizes
+
+    dinoX = Math.max(dinoX - moveDistance, 0);
+    dino.style.left = dinoX + "px";
 }
